@@ -31,10 +31,10 @@
 1. **userAccount**
 - Fields: userInfo, userID(PK)
 - Methods: authentication, authorization, register 
-2. **2.2. Score board**
+2. **Score board**
 - Fields: userID(FK -> userAccount(userID) - CASCADE, required, unique), score(required - default=0)
 - Methods: updateScore
-3. **2.3. Session token**
+3. **Session token**
 - Fields: userID(FK -> userAccount(userID) - CASCADE, required, unique), token(required)
 - Method: createToken, deleteToken
 - Addition: May be we can store clue data's for recovering user session.
@@ -42,6 +42,11 @@
 ### 2.2. Triggers
 1. Trigger in before update increase user's score, a associated session token of this user must be establish.
 2. Trigger after create new user account, must create a associated record in score for presenting it user's score.
+
+### 2.3. Constraints
+1. Score of each user must be greater or equal to 0
+2. Each user account must have the associated record in score for presenting it user's score
+3. In every user's score update action must have the associated session token correspondingly
 
 ## 3. Middlewares
 
@@ -126,7 +131,7 @@
 
 To prevent malicious users from increasing scores without authorization, the following security measures are implemented:
 
-- Authorization is required for score updates (`POST /scores/update`).
+- Authorization is required for score updates (`PUT /scores`).
 - Check where a valid session token or not in every sensitive routes.
 
 ## Additional Comments
