@@ -20,33 +20,32 @@ export async function listResources(req: Request, res: Response) {
     try {
         const api = new ApiFeatureClass<ResourceDocument>(Resource, req.query)
 
-        // All that features can be use combined
+        // All those features can be used combined
         // 1. Search by field name
         //  - With 2 parameters : searchField(default = name), keyword
-        //      + searchField is stand for which attribute will be search
-        //      + keyword is stand for value for searching
-        // Ex: We want to search which documents have substring "Product1" in "name". Query should be look like ?searchField=name&keyword=Product1
+        //      + searchField stands for which attribute will be search
+        //      + keyword stands for value for searching
+        // Ex: We want to search which documents have substring "Product1" in "name". The query should look like ?searchField=name&keyword=Product1
 
         // 2. Filter 
         // - With 1 parameter : filedName[operator]
-        //      + filedName[operator] is stand for which attribute will be filter and the filter operator
-        // Ex: We want to filter documents have price greater or equal 100. Query should be ?price[gte]=100
+        //      + filedName[operator] stands for which attribute will be filter and the filter operator
+        // Ex: We want to filter documents have "price" greater or equal to 100. The query should look like ?price[gte]=100
 
         // 3. Pagination
         // - With 2 parameters : size(default = 10), page(default=1)
-        //      + size is stand for the number of document in one fetch
-        //      + page is stand for the page will be fetched
-        // Ex: We want to get 10 item of page 3. Query should be ?page=3&size=10
+        //      + size stands for the number of document in one fetch
+        //      + page stands for the page will be fetched
+        // Ex: We want to get 10 item of page 3. The query should look like ?page=3&size=10
 
         // 4. Sort
         // - With 2 parameters : sortDirection(default = asc), sortField(default=_id)
-        //      + sortDirection is stand for direction of sort ("asc" for ASCEND, "desc" for DESCEND)
-        //      + sortField is stand for field will be sort
-        // Ex: We want to sort price descending. Query should be ?desc=&sortField=price
+        //      + sortDirection stands for direction of sort ("asc" for ASCEND, "desc" for DESCEND)
+        //      + sortField stands for field will be sort
+        // Ex: We want to sort price descending. The query should look like ?sortDirection=desc&sortField=price
         const resources = await api.search().filter().exec().sort().pagination().query;
         ApiResponse.fulfill(res, resources, 'Success get resources')
     } catch (error: any) {
-        console.log(error.stack)
         ApiResponse.reject(res, error.message, error.status)
     }
 }
